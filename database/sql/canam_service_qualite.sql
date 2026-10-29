@@ -230,11 +230,18 @@ CREATE TABLE droits_assures (
     date_fin DATE NULL,
     verifie_le DATETIME NULL,
     observations TEXT NULL,
+    amo_assure VARCHAR(13) NULL,
+    amo_ayant_droit VARCHAR(13) NULL,
+    numero_recepisse VARCHAR(100) NULL,
+    nom_assure VARCHAR(60) NULL,
+    date_immatriculation_source VARCHAR(10) NULL,
+    date_fermeture_premium DATE NULL,
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     UNIQUE KEY uq_droits_assures_amo (numero_amo_recepisse),
-    KEY idx_droits_assures_statut (statut)
+    KEY idx_droits_assures_statut (statut),
+    KEY idx_droits_assures_recepisse (numero_recepisse)
 ) ENGINE=InnoDB;
 
 CREATE TABLE disponibilite_cartes (
@@ -244,12 +251,19 @@ CREATE TABLE disponibilite_cartes (
     disponibilite ENUM('disponible','en_preparation','emise','indisponible','inconnue') NOT NULL DEFAULT 'inconnue',
     date_mise_a_jour DATETIME NULL,
     observations TEXT NULL,
+    numero_recepisse VARCHAR(100) NULL,
+    id_statut_source VARCHAR(20) NULL,
+    nom_assure VARCHAR(60) NULL,
+    ogd_source VARCHAR(6) NULL,
+    numero_lot_source VARCHAR(40) NULL,
+    date_emission_source DATE NULL,
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     UNIQUE KEY uq_disponibilite_cartes_numero (numero_carte),
     KEY idx_disponibilite_cartes_amo (numero_amo_recepisse),
-    KEY idx_disponibilite_cartes_etat (disponibilite)
+    KEY idx_disponibilite_cartes_etat (disponibilite),
+    KEY idx_disponibilite_cartes_recepisse (numero_recepisse)
 ) ENGINE=InnoDB;
 
 -- =====================================================================

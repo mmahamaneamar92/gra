@@ -113,9 +113,50 @@ Deux tables complètent le schéma CANAM :
 - `droits_assures` conserve le N° AMO/récépissé, le statut des droits (`ouverts`, `suspendus`, `fermes` ou `inconnu`), les dates de validité, la date de vérification et les observations. Elle contient une fiche par N° AMO/récépissé.
 - `disponibilite_cartes` conserve le N° AMO/récépissé, le statut de la carte (`disponible`, `en_preparation`, `emise`, `indisponible` ou `inconnue`), le numéro de carte, la date de mise à jour et les observations. Elle peut contenir plusieurs cartes par N° AMO/récépissé.
 
-Les nouvelles tables sont définies dans `database/sql/canam_service_qualite.sql` et créées par la migration `2026_10_29_000002_create_assure_rights_and_card_availability_tables.php`. Le fichier `database/sql/canam_service_qualite_complet.sql` reprend le SQL complet fourni et y ajoute les deux tables.
+Les nouvelles tables sont définies dans `database/sql/canam_service_qualite.sql` et créées par les migrations `2026_10_29_000002` et `2026_10_29_000004`. Le fichier `database/sql/canam_service_qualite_complet.sql` reprend le SQL complet fourni et y ajoute les deux tables.
 
-Dans le formulaire de création ou de modification d’une réclamation ou d’une demande d’assistance, la saisie du N° AMO ou du récépissé déclenche automatiquement une recherche dans ces deux tables. Le formulaire affiche les droits et toutes les cartes connues pour ce numéro, ou indique si aucune fiche n’est trouvée. Le contrôle informe l’agent et ne déclenche pas d’affectation automatique. Les tables doivent être alimentées avec les données de référence CANAM ; aucune connexion à un système externe n’est fournie.
+Dans le formulaire de création ou de modification d’une réclamation ou d’une demande d’assistance, la saisie du N° AMO ou du récépissé déclenche automatiquement une recherche dans ces deux tables. Le formulaire affiche les droits et toutes les cartes connues pour ce numéro, ou indique si aucune fiche n’est trouvée. Le contrôle informe l’agent et ne déclenche pas d’affectation automatique.
+
+### Synchronisation Oracle (droits et cartes)
+
+La commande `php artisan canam:sync-oracle` lit les vues `V_BENEFICIAIRE_AMO` et `V_CARTES_AMO` depuis Oracle puis actualise les deux tables MySQL; `--dry-run` vérifie la lecture sans écrire. Elle utilise `AMOASSURE` comme identifiant principal des droits et `NUM_AMO` (ou, à défaut, `NUMERO_RECEPISSE`) pour les cartes. Les dates Oracle en `DD/MM/YYYY` sont converties pour MySQL. La commande utilise `ID_STATUT_CARTE` brut et laisse la disponibilité à `inconnue` tant que son dictionnaire métier n’est pas configuré.
+
+Sur le serveur PHP, installer Oracle Instant Client et l’extension PHP OCI8, puis, dans le projet Laravel 10 complet :
+
+```bash
+composer require yajra/laravel-oci8:^10.0
+php artisan vendor:publish --tag=oracle
+```
+
+Activer `Yajra\\Oci8\\Oci8ServiceProvider::class` dans `config/app.php` si l’auto-découverte ne l’a pas ajouté. Ajouter une connexion nommée `oracle` dans `config/database.php` (en plus de MySQL) :
+
+```php
+'oracle' => [
+    'driver' => 'oracle',
+    'host' => env('ORACLE_HOST'),
+    'port' => env('ORACLE_PORT', '1521'),
+    'database' => env('ORACLE_SID'),
+    'username' => env('ORACLE_USERNAME'),
+    'password' => env('ORACLE_PASSWORD'),
+    'charset' => 'AL32UTF8',
+    'prefix' => '',
+    'prefix_schema' => env('ORACLE_SCHEMA', ''),
+],
+```
+
+Ajouter localement au `.env` (ne jamais committer les valeurs sensibles) :
+
+```dotenv
+ORACLE_HOST=192.168.1.15
+ORACLE_PORT=1521
+ORACLE_SID=intcanampdb1.localdomain
+ORACLE_USERNAME=GRCCANAM
+ORACLE_PASSWORD=
+ORACLE_SCHEMA=
+CANAM_ORACLE_CARD_STATUS_MAP=
+```
+
+Le mot de passe est laissé vide exprès : le renseigner uniquement dans le `.env` du serveur. Le schéma Oracle est celui du compte connecté (`GRCCANAM`), donc aucun préfixe de schéma n’est nécessaire. La valeur d’exemple `ID_STATUT_CARTE=11` ne suffit pas à déterminer si une carte est disponible, émise ou en préparation. Une fois le dictionnaire confirmé, renseigner par exemple `CANAM_ORACLE_CARD_STATUS_MAP=11=emise,12=disponible` selon les codes validés par CANAM. Appliquer les migrations MySQL, puis exécuter d’abord `php artisan canam:sync-oracle --dry-run`, et ensuite `php artisan canam:sync-oracle`. OCI8 et Instant Client doivent aussi être présents dans l’environnement PHP qui exécute la commande. La connexion Oracle n’a pas pu être testée depuis cet environnement de développement.
 
 ## Changement de mot de passe
 

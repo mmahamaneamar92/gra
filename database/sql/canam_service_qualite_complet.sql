@@ -97,11 +97,18 @@ CREATE TABLE IF NOT EXISTS `droits_assures` (
   `date_fin` date DEFAULT NULL,
   `verifie_le` datetime DEFAULT NULL,
   `observations` text COLLATE utf8mb4_unicode_ci,
+  `amo_assure` varchar(13) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `amo_ayant_droit` varchar(13) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `numero_recepisse` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nom_assure` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `date_immatriculation_source` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `date_fermeture_premium` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_droits_assures_amo` (`numero_amo_recepisse`),
-  KEY `idx_droits_assures_statut` (`statut`)
+  KEY `idx_droits_assures_statut` (`statut`),
+  KEY `idx_droits_assures_recepisse` (`numero_recepisse`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `disponibilite_cartes` (
@@ -111,12 +118,19 @@ CREATE TABLE IF NOT EXISTS `disponibilite_cartes` (
   `disponibilite` enum('disponible','en_preparation','emise','indisponible','inconnue') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'inconnue',
   `date_mise_a_jour` datetime DEFAULT NULL,
   `observations` text COLLATE utf8mb4_unicode_ci,
+  `numero_recepisse` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id_statut_source` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nom_assure` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ogd_source` varchar(6) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `numero_lot_source` varchar(40) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `date_emission_source` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_disponibilite_cartes_numero` (`numero_carte`),
   KEY `idx_disponibilite_cartes_amo` (`numero_amo_recepisse`),
-  KEY `idx_disponibilite_cartes_etat` (`disponibilite`)
+  KEY `idx_disponibilite_cartes_etat` (`disponibilite`),
+  KEY `idx_disponibilite_cartes_recepisse` (`numero_recepisse`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Listage de la structure de la table canam_service_qualite. demandes_assistance
