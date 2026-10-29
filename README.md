@@ -121,7 +121,9 @@ Chaque utilisateur connecté peut ouvrir **Mon mot de passe** dans la barre de n
 
 ## Tableau de bord et rapport PDF
 
-Le tableau de bord présente le nombre de fiches par statut des droits et de disponibilité des cartes. Le bouton **Télécharger le rapport PDF** exporte ces totaux dans un rapport récapitulatif, sans numéros AMO/récépissés ni données nominatives. Le rapport PDF utilise `barryvdh/laravel-dompdf`, installé pendant la préparation Laravel.
+Le tableau de bord présente le nombre de fiches par statut des droits et de disponibilité des cartes. Les filtres permettent de choisir un statut des droits, un statut de carte et de rechercher par N° AMO/récépissé, nom, matricule ou contact. Le bouton **Télécharger le rapport PDF filtré** exporte les lignes correspondant aux filtres, avec les informations d’assuré, les droits, les cartes, les dates et les observations. Le rapport PDF utilise `barryvdh/laravel-dompdf`, installé pendant la préparation Laravel.
+
+Les champs d’identité et de contact du rapport sont repris du dossier CANAM le plus récent associé au N° AMO/récépissé. Si aucun dossier n’est associé, le rapport affiche les informations de droits et de carte disponibles et signale les champs d’identité absents.
 
 ## 4. Calcul automatique de l'échéance
 
