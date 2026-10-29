@@ -4,6 +4,7 @@ use App\Http\Controllers\{DashboardController,ReclamationController,DemandeAssis
 Route::get('/',fn()=>redirect()->route('dashboard'));
 Route::middleware(['auth'])->group(function(){
  Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
+ Route::get('/dashboard/statuts-assures/pdf',[DashboardController::class,'exportAssureStatusPdf'])->name('dashboard.assures.pdf');
  Route::get('/mon-compte/mot-de-passe',[AccountPasswordController::class,'edit'])->name('account.password.edit');
  Route::put('/mon-compte/mot-de-passe',[AccountPasswordController::class,'update'])->name('account.password.update');
  Route::get('/controle-assure',[App\Http\Controllers\ControleAssureController::class,'show'])->name('assures.controle');

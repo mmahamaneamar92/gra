@@ -23,6 +23,7 @@ Cette archive contient le code applicatif à intégrer dans un projet Laravel 10
 
    ```bash
    composer require laravel/breeze --dev
+   composer require barryvdh/laravel-dompdf:^3.1
    php artisan breeze:install blade
    npm install
    npm run build
@@ -117,6 +118,10 @@ Dans le formulaire de création ou de modification d’une réclamation ou d’u
 ## Changement de mot de passe
 
 Chaque utilisateur connecté peut ouvrir **Mon mot de passe** dans la barre de navigation. Le formulaire demande le mot de passe actuel, un nouveau mot de passe d’au moins 8 caractères et sa confirmation. Le nouveau mot de passe est enregistré sous forme de hash Laravel.
+
+## Tableau de bord et rapport PDF
+
+Le tableau de bord présente le nombre de fiches par statut des droits et de disponibilité des cartes. Le bouton **Télécharger le rapport PDF** exporte ces totaux dans un rapport récapitulatif, sans numéros AMO/récépissés ni données nominatives. Le rapport PDF utilise `barryvdh/laravel-dompdf`, installé pendant la préparation Laravel.
 
 ## 4. Calcul automatique de l'échéance
 

@@ -1,4 +1,42 @@
-@extends('layouts.app') @section('title','Tableau de bord') @section('content')
-<div class="page-head"><div><h1>Tableau de bord</h1><p>Suivi des réclamations et demandes d’assistance</p></div></div>
-<div class="stats"><div class="stat"><span>Réclamations</span><strong>{{ $totalReclamations }}</strong><a href="{{ route('reclamations.index') }}">Consulter →</a></div><div class="stat"><span>Demandes d’assistance</span><strong>{{ $totalAssistance }}</strong><a href="{{ route('assistance.index') }}">Consulter →</a></div><div class="stat"><span>Dossiers en cours</span><strong>{{ $enCours }}</strong></div><div class="stat danger"><span>Dossiers en retard</span><strong>{{ $enRetard }}</strong></div></div>
-<div class="grid-two"><section class="panel"><h2>Dernières réclamations</h2>@include('dashboard._table',['items'=>$recentReclamations,'routeName'=>'reclamations.show'])</section><section class="panel"><h2>Dernières demandes d’assistance</h2>@include('dashboard._table',['items'=>$recentAssistance,'routeName'=>'assistance.show'])</section></div>@endsection
+@extends('layouts.app')
+@section('title', 'Tableau de bord')
+@section('content')
+<div class="page-head">
+    <div>
+        <h1>Tableau de bord</h1>
+        <p>Suivi des dossiers, des droits des assurés et de la disponibilité des cartes</p>
+    </div>
+    <a class="btn primary" href="{{ route('dashboard.assures.pdf') }}">Télécharger le rapport PDF</a>
+</div>
+
+<div class="stats">
+    <div class="stat"><span>Réclamations</span><strong>{{ $totalReclamations }}</strong><a href="{{ route('reclamations.index') }}">Consulter →</a></div>
+    <div class="stat"><span>Demandes d’assistance</span><strong>{{ $totalAssistance }}</strong><a href="{{ route('assistance.index') }}">Consulter →</a></div>
+    <div class="stat"><span>Dossiers en cours</span><strong>{{ $enCours }}</strong></div>
+    <div class="stat danger"><span>Dossiers en retard</span><strong>{{ $enRetard }}</strong></div>
+</div>
+
+<div class="grid-two">
+    <section class="panel">
+        <h2>Statut des droits des assurés <span class="summary-total">Total : {{ $rightsTotal }}</span></h2>
+        <div class="table-wrap"><table class="status-summary"><thead><tr><th>Statut</th><th>Nombre</th></tr></thead><tbody>
+            @foreach($rightsLabels as $status => $label)
+                <tr><td>{{ $label }}</td><td><strong>{{ $rightsCounts[$status] }}</strong></td></tr>
+            @endforeach
+        </tbody></table></div>
+    </section>
+    <section class="panel">
+        <h2>Disponibilité des cartes <span class="summary-total">Total : {{ $cardsTotal }}</span></h2>
+        <div class="table-wrap"><table class="status-summary"><thead><tr><th>Statut</th><th>Nombre</th></tr></thead><tbody>
+            @foreach($cardLabels as $status => $label)
+                <tr><td>{{ $label }}</td><td><strong>{{ $cardCounts[$status] }}</strong></td></tr>
+            @endforeach
+        </tbody></table></div>
+    </section>
+</div>
+
+<div class="grid-two">
+    <section class="panel"><h2>Dernières réclamations</h2>@include('dashboard._table', ['items' => $recentReclamations, 'routeName' => 'reclamations.show'])</section>
+    <section class="panel"><h2>Dernières demandes d’assistance</h2>@include('dashboard._table', ['items' => $recentAssistance, 'routeName' => 'assistance.show'])</section>
+</div>
+@endsection
