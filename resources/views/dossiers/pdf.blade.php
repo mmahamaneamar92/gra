@@ -10,6 +10,9 @@
         h2 { color: #0b5c9e; font-size: 10px; margin: 0 0 4px; }
         p { margin: 2px 0; }
         .meta { color: #68766f; font-size: 9px; margin-bottom: 10px; }
+        .brand-header { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+        .brand-header td { border: 0; padding: 0 8px 0 0; vertical-align: middle; }
+        .brand-logo { width: 58px; height: 58px; }
         .filters { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
         .filters td { border: 1px solid #d6e2ec; background: #f3f8fd; padding: 6px; }
         .data { width: 100%; border-collapse: collapse; table-layout: fixed; }
@@ -26,8 +29,10 @@
     </style>
 </head>
 <body>
-    <h1>Rapport — {{ $label }}</h1>
-    <div class="meta">CANAM — Service Qualité · Généré le {{ $generatedAt }} · {{ $dossiers->count() }} dossier(s)</div>
+    <table class="brand-header"><tr>
+        <td style="width:66px"><img class="brand-logo" src="{{ $logoData }}" alt="Logo CANAM"></td>
+        <td><h1>Rapport — {{ $label }}</h1><div class="meta">CANAM — Service Qualité · Généré le {{ $generatedAt }} · {{ $dossiers->count() }} dossier(s)</div></td>
+    </tr></table>
     <table class="filters"><tr>
         <td><strong>Statut :</strong> {{ $filters['statut'] ? ucfirst(str_replace('_', ' ', $filters['statut'])) : 'Tous' }}</td>
         <td><strong>Recherche :</strong> {{ $filters['recherche'] ?: 'Aucune' }}</td>

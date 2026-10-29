@@ -2,9 +2,12 @@
 @section('title', 'Tableau de bord')
 @section('content')
 <div class="page-head">
-    <div>
-        <h1>Tableau de bord</h1>
-        <p>Suivi des dossiers, des droits des assurés et de la disponibilité des cartes</p>
+    <div class="dashboard-heading">
+        <img class="dashboard-logo" src="{{ asset('img/LogoCANAM.png') }}" alt="Logo de la CANAM Mali">
+        <div>
+            <h1>Tableau de bord</h1>
+            <p>Suivi des dossiers, des droits des assurés et de la disponibilité des cartes</p>
+        </div>
     </div>
     <a class="btn primary" href="{{ route('dashboard.assures.pdf', array_filter($filters, fn ($value) => $value !== '')) }}">Télécharger le rapport PDF filtré</a>
 </div>

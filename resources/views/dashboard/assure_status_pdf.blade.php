@@ -10,6 +10,9 @@
         h2 { color: #0b5c9e; font-size: 12px; margin: 15px 0 6px; }
         p { margin: 3px 0; }
         .meta { color: #68766f; font-size: 9px; margin-bottom: 9px; }
+        .brand-header { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+        .brand-header td { border: 0; padding: 0 8px 0 0; vertical-align: middle; }
+        .brand-logo { width: 58px; height: 58px; }
         .summary { width: 100%; border-collapse: collapse; margin: 8px 0 14px; }
         .summary td { width: 50%; padding: 7px; border: 1px solid #d7e5f2; background: #f0f6fc; font-size: 10px; }
         table.data { width: 100%; border-collapse: collapse; table-layout: fixed; }
@@ -26,8 +29,10 @@
     </style>
 </head>
 <body>
-    <h1>Rapport des droits et de la disponibilité des cartes</h1>
-    <div class="meta">CANAM — Service Qualité · Généré le {{ $generatedAt }} · {{ $rows->count() }} ligne(s)</div>
+    <table class="brand-header"><tr>
+        <td style="width:66px"><img class="brand-logo" src="{{ $logoData }}" alt="Logo CANAM"></td>
+        <td><h1>Rapport des droits et de la disponibilité des cartes</h1><div class="meta">CANAM — Service Qualité · Généré le {{ $generatedAt }} · {{ $rows->count() }} ligne(s)</div></td>
+    </tr></table>
 
     <table class="summary"><tr>
         <td><strong>Filtre droits :</strong> {{ $filters['droits_statut'] ? ($rightsLabels[$filters['droits_statut']] ?? $filters['droits_statut']) : 'Tous' }}</td>

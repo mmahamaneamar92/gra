@@ -70,6 +70,7 @@ class DashboardController extends Controller
             'filters' => $filters,
             'rightsLabels' => self::RIGHTS_STATUSES,
             'cardLabels' => self::CARD_STATUSES,
+            'logoData' => 'data:image/png;base64,'.base64_encode(file_get_contents(public_path('img/LogoCANAM.png'))),
             'generatedAt' => now()->format('d/m/Y H:i'),
         ])->setPaper('a4', 'landscape')->download('droits-et-disponibilite-cartes-'.now()->format('Y-m-d').'.pdf');
     }
