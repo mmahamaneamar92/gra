@@ -1,0 +1,6 @@
+<?php
+namespace App\Http\Controllers; use App\Models\DemandeAssistance; use Illuminate\Http\Request; use Illuminate\Support\Facades\DB;
+class DemandeAssistanceController extends DossierController {
+ public function __construct(){ $this->module='assistance';$this->modelClass=DemandeAssistance::class;$this->prefix='assistance';$this->label="Demandes d'assistance";$this->nameField='demandeur';}
+ public function notifier(Request $request,$id){$this->guardRoles('ADMIN','RQ','NOTIFICATION');$data=$request->validate(['canal'=>'required|in:telephone,email,sms,courrier,autre','statut'=>'required|in:appele_informe,injoignable,rappel_necessaire,notification_effectuee,echec,non_requise','commentaire'=>'nullable|string|max:5000','prochaine_tentative'=>'nullable|date']);$d=DemandeAssistance::findOrFail($id);DB::transaction(function()use($d,$data){DB::table('notifications_assistance')->insert(['demande_assistance_id'=>$d->id,'date_appel'=>now(),'responsable_notification_id'=>auth()->id(),'canal'=>$data['canal'],'statut'=>$data['statut'],'commentaire'=>$data['commentaire']??null,'prochaine_tentative'=>$data['prochaine_tentative']??null,'created_at'=>now(),'updated_at'=>now()]);$d->update(['statut_notification'=>$data['statut'],'date_appel'=>now(),'responsable_notification_id'=>auth()->id()]);});return back()->with('success','Tentative de notification enregistrée.');}
+}

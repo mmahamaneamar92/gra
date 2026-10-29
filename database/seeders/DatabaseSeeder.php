@@ -1,0 +1,11 @@
+<?php
+namespace Database\Seeders;
+use Illuminate\Database\Seeder; use Illuminate\Support\Facades\DB;
+class DatabaseSeeder extends Seeder {public function run(): void {
+ $now=now();
+ foreach([['ADMIN','Administrateur'],['RQ','Responsable Qualité'],['ENREGISTREMENT','Agent d’enregistrement'],['TRAITEMENT','Responsable de traitement'],['RELANCE','Responsable de relance'],['NOTIFICATION','Responsable de notification'],['CONSULTATION','Consultation']] as [$code,$libelle]) DB::table('roles')->updateOrInsert(['code'=>$code],['libelle'=>$libelle,'updated_at'=>$now,'created_at'=>$now]);
+ foreach([['CARTE_AMO','Gestion de la carte AMO'],['IMMATRICULATION','Immatriculation'],['PRISE_EN_CHARGE','Prise en charge'],['PRESTATIONS','Prestations'],['AUTRE','Autre processus']] as [$code,$libelle]) DB::table('processus')->updateOrInsert(['code'=>$code],['libelle'=>$libelle,'actif'=>1,'updated_at'=>$now,'created_at'=>$now]);
+ foreach(['Courrier','Téléphone','Email','Accueil physique','Direction / service interne','Autre'] as $libelle) DB::table('provenances')->updateOrInsert(['module'=>'commun','libelle'=>$libelle],['actif'=>1,'updated_at'=>$now,'created_at'=>$now]);
+ foreach([['reclamation','CARTE_NON_RECUE','Carte AMO non reçue'],['reclamation','ERREUR_CARTE','Erreur sur la carte AMO'],['reclamation','DOSSIER_BLOQUE','Dossier bloqué'],['reclamation','AUTRE','Autre réclamation'],['assistance','INFORMATION','Demande d’information'],['assistance','AIDE_UTILISATION','Aide à l’utilisation'],['assistance','INCIDENT','Incident ou anomalie'],['assistance','AUTRE','Autre demande d’assistance']] as [$module,$code,$libelle]) DB::table('qualifications')->updateOrInsert(['module'=>$module,'code'=>$code],['libelle'=>$libelle,'actif'=>1,'updated_at'=>$now,'created_at'=>$now]);
+ foreach(['reclamation','assistance'] as $module){$exists=DB::table('delais_traitement')->where('module',$module)->whereNull('qualification_id')->exists();if(!$exists)DB::table('delais_traitement')->insert(['module'=>$module,'qualification_id'=>null,'libelle'=>'Délai général '.$module.' - À valider','duree'=>5,'unite'=>'jours','calendrier'=>'calendaire','point_depart'=>'affectation','alerte_avant'=>1,'unite_alerte'=>'jours','frequence_relance'=>2,'unite_frequence_relance'=>'jours','escalade_apres'=>5,'actif'=>1,'date_debut'=>today(),'created_at'=>$now,'updated_at'=>$now]);}
+}}

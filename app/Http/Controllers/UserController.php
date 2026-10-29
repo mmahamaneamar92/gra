@@ -1,0 +1,11 @@
+<?php
+namespace App\Http\Controllers;
+use App\Models\User; use App\Models\Role; use Illuminate\Http\Request; use Illuminate\Support\Facades\DB;
+class UserController extends Controller {
+ private function authorizeAdmin(): void { abort_unless(auth()->user()->isRole('ADMIN'),403,'Réservé à l’administrateur.'); }
+ public function index(){ $this->authorizeAdmin(); $users=User::with('roles')->orderBy('nom')->paginate(20); return view('admin.users.index',compact('users')); }
+ public function create(){ $this->authorizeAdmin(); $roles=Role::orderBy('libelle')->get(); return view('admin.users.form',compact('roles')); }
+ public function store(Request $r){ $this->authorizeAdmin(); $d=$r->validate(['nom'=>'required|string|max:100','prenom'=>'nullable|string|max:100','identifiant'=>'required|string|max:100|unique:users,identifiant','email'=>'nullable|email|max:190|unique:users,email','telephone'=>'nullable|string|max:30','password'=>'required|string|min:10|confirmed','role_id'=>'required|exists:roles,id','actif'=>'nullable|boolean']); $d['actif']=$r->boolean('actif');$user=DB::transaction(function()use($d){$u=User::create(collect($d)->except('role_id')->all());$u->roles()->sync([$d['role_id']=>['attribue_par'=>auth()->id()]]);return $u;});return redirect()->route('admin.users.index')->with('success','Compte utilisateur créé.'); }
+ public function edit($id){$this->authorizeAdmin();$user=User::with('roles')->findOrFail($id);$roles=Role::orderBy('libelle')->get();return view('admin.users.form',compact('user','roles'));}
+ public function update(Request $r,$id){$this->authorizeAdmin();$u=User::findOrFail($id);$d=$r->validate(['nom'=>'required|string|max:100','prenom'=>'nullable|string|max:100','identifiant'=>'required|string|max:100|unique:users,identifiant,'.$u->id,'email'=>'nullable|email|max:190|unique:users,email,'.$u->id,'telephone'=>'nullable|string|max:30','password'=>'nullable|string|min:10|confirmed','role_id'=>'required|exists:roles,id','actif'=>'nullable|boolean']);$d['actif']=$r->boolean('actif');if(empty($d['password']))unset($d['password']);$roleId=$d['role_id'];unset($d['role_id']);$u->update($d);$u->roles()->sync([$roleId=>['attribue_par'=>auth()->id()]]);return redirect()->route('admin.users.index')->with('success','Compte utilisateur mis à jour.'); }
+}
