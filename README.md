@@ -125,6 +125,8 @@ Le tableau de bord présente le nombre de fiches par statut des droits et de dis
 
 Les champs d’identité et de contact du rapport sont repris du dossier CANAM le plus récent associé au N° AMO/récépissé. Si aucun dossier n’est associé, le rapport affiche les informations de droits et de carte disponibles et signale les champs d’identité absents.
 
+Les listes **Réclamations** et **Demandes d’assistance** proposent également un export PDF. Le rapport reprend les filtres actifs de recherche et de statut et inclut les détails des dossiers correspondants.
+
 ## 4. Calcul automatique de l'échéance
 
 `app/Services/EcheanceService.php` cherche la règle active qui correspond au module et à la qualification. La règle spécifique à une qualification est prioritaire ; sinon, la règle générale du module (`qualification_id = NULL`) est utilisée. Les dates de début et de fin sont vérifiées.

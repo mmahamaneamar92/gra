@@ -8,10 +8,12 @@ Route::middleware(['auth'])->group(function(){
  Route::get('/mon-compte/mot-de-passe',[AccountPasswordController::class,'edit'])->name('account.password.edit');
  Route::put('/mon-compte/mot-de-passe',[AccountPasswordController::class,'update'])->name('account.password.update');
  Route::get('/controle-assure',[App\Http\Controllers\ControleAssureController::class,'show'])->name('assures.controle');
+ Route::get('/reclamations/export/pdf',[ReclamationController::class,'exportPdf'])->name('reclamations.pdf');
  Route::resource('reclamations',ReclamationController::class);
  Route::post('reclamations/{id}/affecter',[ReclamationController::class,'affecter'])->name('reclamations.affecter');
  Route::post('reclamations/{id}/statut',[ReclamationController::class,'statut'])->name('reclamations.statut');
  Route::post('reclamations/{id}/relancer',[ReclamationController::class,'relancer'])->name('reclamations.relancer');
+ Route::get('/assistance/export/pdf',[DemandeAssistanceController::class,'exportPdf'])->name('assistance.pdf');
  Route::resource('assistance',DemandeAssistanceController::class)->parameters(['assistance'=>'id']);
  Route::post('assistance/{id}/affecter',[DemandeAssistanceController::class,'affecter'])->name('assistance.affecter');
  Route::post('assistance/{id}/statut',[DemandeAssistanceController::class,'statut'])->name('assistance.statut');
