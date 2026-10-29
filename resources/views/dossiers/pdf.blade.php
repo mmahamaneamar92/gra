@@ -5,23 +5,23 @@
     <title>{{ $label }} — rapport PDF</title>
     <style>
         @page { margin: 22px 24px; }
-        body { font-family: DejaVu Sans, sans-serif; color: #1d2b27; font-size: 8px; }
-        h1 { color: #087b50; font-size: 18px; margin: 0 0 5px; }
-        h2 { color: #087b50; font-size: 10px; margin: 0 0 4px; }
+        body { font-family: DejaVu Sans, sans-serif; color: #1d2b3a; font-size: 8px; }
+        h1 { color: #0b5c9e; font-size: 18px; margin: 0 0 5px; }
+        h2 { color: #0b5c9e; font-size: 10px; margin: 0 0 4px; }
         p { margin: 2px 0; }
         .meta { color: #68766f; font-size: 9px; margin-bottom: 10px; }
         .filters { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
-        .filters td { border: 1px solid #dfe7e2; background: #f3f8f5; padding: 6px; }
+        .filters td { border: 1px solid #d6e2ec; background: #f3f8fd; padding: 6px; }
         .data { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        .data th, .data td { border: 1px solid #dfe7e2; padding: 6px; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
-        .data th { background: #edf4f0; color: #24443a; }
+        .data th, .data td { border: 1px solid #d6e2ec; padding: 6px; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+        .data th { background: #eaf3fb; color: #21415e; }
         .col-dossier { width: 17%; }
         .col-assure { width: 20%; }
         .col-suivi { width: 18%; }
         .col-infos { width: 25%; }
         .col-traitement { width: 20%; }
-        .muted { color: #68766f; }
-        .empty { text-align: center; color: #68766f; padding: 18px; }
+        .muted { color: #687989; }
+        .empty { text-align: center; color: #687989; padding: 18px; }
         tr.dossier-row { page-break-inside: avoid; }
     </style>
 </head>

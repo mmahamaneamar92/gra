@@ -5,23 +5,23 @@
     <title>Rapport droits et cartes des assurés</title>
     <style>
         @page { margin: 22px 24px; }
-        body { font-family: DejaVu Sans, sans-serif; color: #1d2b27; font-size: 8px; }
-        h1 { color: #087b50; font-size: 18px; margin: 0 0 5px; }
-        h2 { color: #087b50; font-size: 12px; margin: 15px 0 6px; }
+        body { font-family: DejaVu Sans, sans-serif; color: #1d2b3a; font-size: 8px; }
+        h1 { color: #0b5c9e; font-size: 18px; margin: 0 0 5px; }
+        h2 { color: #0b5c9e; font-size: 12px; margin: 15px 0 6px; }
         p { margin: 3px 0; }
         .meta { color: #68766f; font-size: 9px; margin-bottom: 9px; }
         .summary { width: 100%; border-collapse: collapse; margin: 8px 0 14px; }
-        .summary td { width: 50%; padding: 7px; border: 1px solid #dce9e2; background: #eef6f1; font-size: 10px; }
+        .summary td { width: 50%; padding: 7px; border: 1px solid #d7e5f2; background: #f0f6fc; font-size: 10px; }
         table.data { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        .data th, .data td { padding: 5px; border: 1px solid #dfe7e2; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
-        .data th { background: #edf4f0; color: #24443a; }
+        .data th, .data td { padding: 5px; border: 1px solid #d6e2ec; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+        .data th { background: #eaf3fb; color: #21415e; }
         .col-id { width: 16%; }
         .col-contact { width: 12%; }
         .col-loc { width: 11%; }
         .col-rights { width: 19%; }
         .col-card { width: 19%; }
         .col-observation { width: 23%; }
-        .muted { color: #68766f; }
+        .muted { color: #687989; }
         .empty { text-align: center; padding: 15px; color: #68766f; }
     </style>
 </head>

@@ -2,6 +2,8 @@
 
 Cette archive contient le code applicatif à intégrer dans un projet Laravel 10 existant/neuf. Les noms des tables et colonnes applicatives sont alignés sur le schéma SQL fourni par le Service Qualité : `numero_ordre`, `reclamant`, `demandeur`, `responsable_traitement_id`, `echeance_traitement`, `causes_probleme`, etc.
 
+L’interface utilise désormais une palette bleu et blanc inspirée de l’identité CANAM Mali.
+
 ## 1. Pré-requis
 
 - PHP 8.1 ou supérieur, extensions Laravel habituelles
