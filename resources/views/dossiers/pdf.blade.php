@@ -18,17 +18,20 @@
         .data { width: 100%; border-collapse: collapse; table-layout: fixed; }
         .data th, .data td { border: 1px solid #d6e2ec; padding: 6px; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
         .data th { background: #eaf3fb; color: #21415e; }
-        .col-dossier { width: 17%; }
-        .col-assure { width: 20%; }
-        .col-suivi { width: 18%; }
-        .col-infos { width: 25%; }
-        .col-traitement { width: 20%; }
+        .col-dossier { width: 13%; }
+        .col-assure { width: 17%; }
+        .col-suivi { width: 15%; }
+        .col-infos { width: 23%; }
+        .col-droits { width: 16%; }
+        .col-traitement { width: 16%; }
         .muted { color: #687989; }
         .empty { text-align: center; color: #687989; padding: 18px; }
         tr.dossier-row { page-break-inside: avoid; }
     </style>
 </head>
 <body>
+    @php($rightsLabels = ['ouverts' => 'Droits ouverts', 'suspendus' => 'Droits suspendus', 'fermes' => 'Droits fermés', 'inconnu' => 'Inconnu'])
+    @php($cardLabels = ['disponible' => 'Disponible', 'en_preparation' => 'En préparation', 'emise' => 'Émise', 'indisponible' => 'Indisponible', 'inconnue' => 'Inconnue'])
     <table class="brand-header"><tr>
         <td style="width:66px"><img class="brand-logo" src="{{ $logoData }}" alt="Logo CANAM"></td>
         <td><h1>Rapport — {{ $label }}</h1><div class="meta">CANAM — Service Qualité · Généré le {{ $generatedAt }} · {{ $dossiers->count() }} dossier(s)</div></td>
@@ -44,6 +47,7 @@
             <th class="col-assure">Assuré / demandeur</th>
             <th class="col-suivi">Statut et suivi</th>
             <th class="col-infos">Informations du dossier</th>
+            <th class="col-droits">Droits et carte</th>
             <th class="col-traitement">Traitement</th>
         </tr></thead>
         <tbody>
@@ -80,13 +84,20 @@
                         <p><strong>Causes :</strong> {{ $dossier->causes_probleme ?? '—' }}</p>
                     </td>
                     <td>
+                        <p><strong>{{ $dossier->droits_statut ? ($rightsLabels[$dossier->droits_statut] ?? $dossier->droits_statut) : 'Droits non renseignés' }}</strong></p>
+                        <p>Ouverture : {{ $dossier->droits_date_debut ? \Carbon\Carbon::parse($dossier->droits_date_debut)->format('d/m/Y') : '—' }}</p>
+                        <p>Fermeture : {{ $dossier->droits_date_fin ? \Carbon\Carbon::parse($dossier->droits_date_fin)->format('d/m/Y') : '—' }}</p>
+                        <p>Carte : {{ $dossier->carte_numero ?? '—' }}</p>
+                        <p>{{ $dossier->carte_disponibilite ? ($cardLabels[$dossier->carte_disponibilite] ?? $dossier->carte_disponibilite) : 'Statut carte non renseigné' }}</p>
+                    </td>
+                    <td>
                         <p><strong>Action entreprise :</strong> {{ $dossier->action_entreprise ?? '—' }}</p>
                         <p><strong>Observations :</strong> {{ $dossier->observations ?? '—' }}</p>
                         @if($dossier->motif_annulation)<p><strong>Motif d’annulation :</strong> {{ $dossier->motif_annulation }}</p>@endif
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="5" class="empty">Aucun dossier ne correspond aux filtres sélectionnés.</td></tr>
+                <tr><td colspan="6" class="empty">Aucun dossier ne correspond aux filtres sélectionnés.</td></tr>
             @endforelse
         </tbody>
     </table>
