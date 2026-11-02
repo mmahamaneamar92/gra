@@ -16,9 +16,10 @@ class ControleAssureController extends Controller
         $reference = trim($data['numero_amo_recepisse']);
 
         $droits = DB::table('droits_assures')
-            ->where('numero_amo', $reference)
-            ->orWhere('numero_recepisse', $reference)
-            ->first(['statut', 'date_debut', 'date_fin', 'verifie_le', 'observations']);
+            ->where(function ($query) use ($reference) {
+                $query->where('numero_amo', $reference)->orWhere('numero_recepisse', $reference);
+            })
+            ->first();
 
         $cartes = DB::table('disponibilite_cartes')
             ->where(function ($query) use ($reference) {
@@ -26,7 +27,7 @@ class ControleAssureController extends Controller
             })
             ->orderByDesc('date_mise_a_jour')
             ->orderByDesc('id')
-            ->get(['numero_amo', 'numero_recepisse', 'disponibilite', 'date_mise_a_jour', 'observations']);
+            ->get();
 
         return response()->json([
             'numero_amo_recepisse' => $reference,

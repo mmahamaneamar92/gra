@@ -110,10 +110,10 @@ L’interface utilise désormais une palette bleu et blanc inspirée de l’iden
 
 Deux tables complètent le schéma CANAM :
 
-- `droits_assures` conserve séparément `numero_amo` et `numero_recepisse`, le statut des droits (`ouverts`, `suspendus`, `fermes` ou `inconnu`), les dates de validité, la date de vérification et les observations.
-- `disponibilite_cartes` conserve séparément `numero_amo` et `numero_recepisse`, le statut (`disponible`, `en_preparation`, `emise`, `indisponible` ou `inconnue`), la date de mise à jour et les observations. La colonne `numero_carte` est retirée.
+- `droits_assures` et `disponibilite_cartes` ont le même ensemble de colonnes : références AMO/récépissé séparées, statuts, dates et champs descriptifs visibles dans les deux captures (identité, OGD, NINA, dates, centre d’enrôlement, ID de statut, etc.). La colonne `numero_carte` est supprimée.
+- Ces informations sont enregistrées localement ; l’application ne se connecte pas à Oracle et ne déduit pas le libellé de `ID_STATUT_CARTE`.
 
-Les tables sont définies dans `database/sql/canam_service_qualite.sql`. La migration `2026_11_02_000004_split_assure_reference_columns.php` met à jour une base existante : elle classe les anciennes valeurs de 13 chiffres comme N° AMO et les autres comme récépissés, puis retire les anciennes colonnes fusionnées et le numéro de carte. Le fichier `database/sql/canam_service_qualite_complet.sql` reprend le SQL complet fourni.
+Les tables sont définies dans `database/sql/canam_service_qualite.sql`. Les migrations `2026_11_02_000004` à `000007` séparent les anciennes références, ajoutent les champs des captures et harmonisent les colonnes des deux tables. Les anciennes valeurs de 13 chiffres sont classées comme N° AMO et les autres comme récépissés. Le fichier `database/sql/canam_service_qualite_complet.sql` reprend le schéma SQL complet.
 
 Dans le formulaire de création ou de modification d’une réclamation ou d’une demande d’assistance, la saisie du N° AMO ou du récépissé déclenche automatiquement une recherche dans ces deux tables. Le formulaire affiche les droits et les statuts de carte connus pour ce numéro, ou indique si aucune fiche n’est trouvée. Le contrôle informe l’agent et ne déclenche pas d’affectation automatique. Les tables doivent être alimentées avec les données de référence CANAM ; aucune connexion à un système externe n’est fournie.
 

@@ -47,12 +47,12 @@
                 <tr>
                     <td>{{ $row->numero_amo ?? '—' }}</td>
                     <td>{{ $row->numero_recepisse ?? '—' }}</td>
-                    <td>{{ $row->nom_assure ?? '—' }}</td>
-                    <td>{{ $row->numero_matricule ?? '—' }}</td>
+                    <td>{{ trim(($row->nom_assure ?? '').' '.($row->prenom_assure ?? '')) ?: '—' }}<br><small>Né(e) {{ $row->date_naissance_assure ?? '—' }} · NINA {{ $row->nina_assure ?? '—' }}<br>Ayant droit {{ $row->amo_ayant_droit ?? '—' }} · Immat. {{ $row->date_immatriculation ?? '—' }}<br>{{ $row->csp ?? '—' }} · {{ $row->lien_assure ?? '—' }} · Sexe {{ $row->sexe_assure ?? '—' }}</small></td>
+                    <td>{{ $row->numero_matricule ?? '—' }}<br><small>OGD {{ $row->ogd_assure ?? '—' }} · EMP {{ $row->numero_emp ?? '—' }}</small></td>
                     <td>{{ $row->contact ?? '—' }}</td>
                     <td>{{ $row->region ?? '—' }}{{ $row->localite ? ' / '.$row->localite : '' }}</td>
-                    <td>{{ $row->droits_statut ? ($rightsLabels[$row->droits_statut] ?? $row->droits_statut) : 'Aucune fiche' }}<br><small>{{ $row->droits_date_debut ?? '—' }} → {{ $row->droits_date_fin ?? '—' }}</small></td>
-                    <td>{{ $row->carte_statut ? ($cardLabels[$row->carte_statut] ?? $row->carte_statut) : 'Aucune fiche' }}</td>
+                    <td>{{ $row->droits_statut ? ($rightsLabels[$row->droits_statut] ?? $row->droits_statut) : 'Aucune fiche' }}<br><small>{{ $row->droits_ouverture_source ?? $row->droits_date_debut ?? '—' }} → {{ $row->droits_fermeture_source ?? $row->droits_date_fin ?? '—' }}<br>Premium {{ $row->droits_fermeture_premium ?? '—' }}</small></td>
+                    <td>{{ $row->carte_statut ? ($cardLabels[$row->carte_statut] ?? $row->carte_statut) : 'Aucune fiche' }}<br><small>ID {{ $row->carte_id_statut ?? $row->carte_id_statut_source ?? '—' }} · Centre {{ $row->carte_centre_enr ?? '—' }}<br>Lot {{ $row->carte_numero_lot ?? '—' }} · Émise {{ $row->carte_date_emission ?? $row->carte_date_emission_source ?? '—' }}<br>Remise {{ $row->carte_date_remise ?? '—' }}</small></td>
                     <td>{{ $row->droits_observations ?? $row->carte_observations ?? '—' }}</td>
                 </tr>
             @empty

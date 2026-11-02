@@ -53,17 +53,23 @@
         <tbody>
             @forelse($rows as $row)
                 <tr>
-                    <td><strong>{{ $row->nom_assure ?? 'Nom non renseigné' }}</strong><br>N° AMO : {{ $row->numero_amo ?? '—' }}<br>N° récépissé : {{ $row->numero_recepisse ?? '—' }}<br>Matricule : {{ $row->numero_matricule ?? '—' }}</td>
+                    <td><strong>{{ trim(($row->nom_assure ?? '').' '.($row->prenom_assure ?? '')) ?: 'Nom non renseigné' }}</strong><br>N° AMO : {{ $row->numero_amo ?? '—' }}<br>N° récépissé : {{ $row->numero_recepisse ?? '—' }}<br>Matricule : {{ $row->numero_matricule ?? '—' }} / {{ $row->matricule_ogd ?? '—' }}<br>Naissance : {{ $row->date_naissance_assure ?? '—' }} · NINA : {{ $row->nina_assure ?? '—' }}<br>OGD : {{ $row->ogd_assure ?? '—' }} · EMP : {{ $row->numero_emp ?? '—' }}<br>CSP : {{ $row->csp ?? '—' }} · Lien : {{ $row->lien_assure ?? '—' }} · Sexe : {{ $row->sexe_assure ?? '—' }}<br>AMO ayant droit : {{ $row->amo_ayant_droit ?? '—' }} · Immatriculation : {{ $row->date_immatriculation ?? '—' }}</td>
                     <td>{{ $row->contact ?? '—' }}</td>
                     <td>{{ $row->region ?? '—' }}<br>{{ $row->localite ?? '—' }}</td>
                     <td>
                         <strong>{{ $row->droits_statut ? ($rightsLabels[$row->droits_statut] ?? $row->droits_statut) : 'Aucune fiche' }}</strong><br>
                         Validité : {{ $row->droits_date_debut ?? '—' }} au {{ $row->droits_date_fin ?? '—' }}<br>
+                        Source : {{ $row->droits_ouverture_source ?? '—' }} au {{ $row->droits_fermeture_source ?? '—' }}<br>
+                        Fermeture premium : {{ $row->droits_fermeture_premium ?? '—' }}<br>
                         Vérifié le : {{ $row->droits_verifie_le ?? '—' }}
                     </td>
                     <td>
-                        {{ $row->carte_statut ? ($cardLabels[$row->carte_statut] ?? $row->carte_statut) : 'Aucune carte' }}<br>
-                        Mis à jour le : {{ $row->carte_date_mise_a_jour ?? '—' }}
+                        {{ $row->carte_statut ? ($cardLabels[$row->carte_statut] ?? $row->carte_statut) : 'Aucune fiche' }}<br>
+                        ID statut : {{ $row->carte_id_statut ?? $row->carte_id_statut_source ?? '—' }} · Centre : {{ $row->carte_centre_enr ?? '—' }}<br>
+                        AMO assuré : {{ $row->carte_amo_assure ?? '—' }}<br>
+                        Lot : {{ $row->carte_numero_lot ?? '—' }}<br>
+                        Émission : {{ $row->carte_date_emission ?? $row->carte_date_emission_source ?? '—' }} · Remise : {{ $row->carte_date_remise ?? '—' }}<br>
+                        Mis à jour : {{ $row->carte_date_mise_a_jour ?? '—' }}
                     </td>
                     <td>Droits : {{ $row->droits_observations ?? '—' }}<br>Carte : {{ $row->carte_observations ?? '—' }}</td>
                 </tr>
@@ -72,6 +78,6 @@
             @endforelse
         </tbody>
     </table>
-    <p class="muted">Les coordonnées et informations nominatives proviennent du dossier CANAM le plus récent associé au N° AMO/récépissé.</p>
+    <p class="muted">Les informations nominatives et administratives proviennent des colonnes locales des fiches droits/cartes et, en complément, du dossier CANAM le plus récent.</p>
 </body>
 </html>
