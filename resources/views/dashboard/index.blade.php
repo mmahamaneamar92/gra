@@ -41,21 +41,22 @@
 
     <h2>Détail des assurés ({{ $assureRows->total() }} résultat(s))</h2>
     <div class="panel table-wrap"><table class="assure-details">
-        <thead><tr><th>N° AMO/récépissé</th><th>Nom</th><th>Matricule</th><th>Contact</th><th>Région / localité</th><th>Droits</th><th>Carte</th><th>Observations</th></tr></thead>
+        <thead><tr><th>N° AMO</th><th>N° récépissé</th><th>Nom</th><th>Matricule</th><th>Contact</th><th>Région / localité</th><th>Droits</th><th>Disponibilité carte</th><th>Observations</th></tr></thead>
         <tbody>
             @forelse($assureRows as $row)
                 <tr>
-                    <td>{{ $row->numero_amo_recepisse }}</td>
+                    <td>{{ $row->numero_amo ?? '—' }}</td>
+                    <td>{{ $row->numero_recepisse ?? '—' }}</td>
                     <td>{{ $row->nom_assure ?? '—' }}</td>
                     <td>{{ $row->numero_matricule ?? '—' }}</td>
                     <td>{{ $row->contact ?? '—' }}</td>
                     <td>{{ $row->region ?? '—' }}{{ $row->localite ? ' / '.$row->localite : '' }}</td>
                     <td>{{ $row->droits_statut ? ($rightsLabels[$row->droits_statut] ?? $row->droits_statut) : 'Aucune fiche' }}<br><small>{{ $row->droits_date_debut ?? '—' }} → {{ $row->droits_date_fin ?? '—' }}</small></td>
-                    <td>{{ $row->numero_carte ?? '—' }}<br><small>{{ $row->carte_statut ? ($cardLabels[$row->carte_statut] ?? $row->carte_statut) : 'Aucune carte' }}</small></td>
+                    <td>{{ $row->carte_statut ? ($cardLabels[$row->carte_statut] ?? $row->carte_statut) : 'Aucune fiche' }}</td>
                     <td>{{ $row->droits_observations ?? $row->carte_observations ?? '—' }}</td>
                 </tr>
             @empty
-                <tr><td colspan="8" class="empty">Aucun assuré ne correspond aux filtres.</td></tr>
+                <tr><td colspan="9" class="empty">Aucun assuré ne correspond aux filtres.</td></tr>
             @endforelse
         </tbody>
     </table></div>

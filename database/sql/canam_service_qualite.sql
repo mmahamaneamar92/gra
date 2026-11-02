@@ -218,13 +218,14 @@ CREATE TABLE delais_traitement (
 
 -- =====================================================================
 -- 3 bis. DONNEES DE REFERENCE POUR LES CONTROLES ASSURE / CARTE
--- Une ligne de droits par numéro AMO/récépissé. La table cartes conserve
--- une ligne par carte et permet plusieurs cartes par numéro AMO/récépissé.
+-- Les numéros AMO et récépissés sont stockés dans des colonnes distinctes.
+-- La table cartes peut conserver plusieurs lignes de disponibilité par assuré.
 -- =====================================================================
 
 CREATE TABLE droits_assures (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    numero_amo_recepisse VARCHAR(100) NULL,
+    numero_amo VARCHAR(100) NULL,
+    numero_recepisse VARCHAR(100) NULL,
     statut ENUM('ouverts','suspendus','fermes','inconnu') NOT NULL DEFAULT 'inconnu',
     date_debut DATE NULL,
     date_fin DATE NULL,
@@ -233,22 +234,23 @@ CREATE TABLE droits_assures (
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
-    UNIQUE KEY uq_droits_assures_amo (numero_amo_recepisse),
+    KEY idx_droits_assures_amo (numero_amo),
+    KEY idx_droits_assures_recepisse (numero_recepisse),
     KEY idx_droits_assures_statut (statut)
 ) ENGINE=InnoDB;
 
 CREATE TABLE disponibilite_cartes (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    numero_amo_recepisse VARCHAR(100) NULL,
-    numero_carte VARCHAR(100) NULL,
+    numero_amo VARCHAR(100) NULL,
+    numero_recepisse VARCHAR(100) NULL,
     disponibilite ENUM('disponible','en_preparation','emise','indisponible','inconnue') NOT NULL DEFAULT 'inconnue',
     date_mise_a_jour DATETIME NULL,
     observations TEXT NULL,
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
-    UNIQUE KEY uq_disponibilite_cartes_numero (numero_carte),
-    KEY idx_disponibilite_cartes_amo (numero_amo_recepisse),
+    KEY idx_disponibilite_cartes_amo (numero_amo),
+    KEY idx_disponibilite_cartes_recepisse (numero_recepisse),
     KEY idx_disponibilite_cartes_etat (disponibilite)
 ) ENGINE=InnoDB;
 

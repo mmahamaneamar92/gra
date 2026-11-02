@@ -87,11 +87,11 @@ INSERT INTO `delais_traitement` (`id`, `module`, `qualification_id`, `libelle`, 
 	(2, 'assistance', NULL, 'Delai general assistance - A VALIDER', 5, 'jours', 'calendaire', 'affectation', 1, 'jours', 2, 'jours', 5, 1, '2026-10-09', NULL, NULL, '2026-10-09 17:18:19', '2026-10-09 17:18:19');
 /*!40000 ALTER TABLE `delais_traitement` ENABLE KEYS */;
 
--- Tables de contrôle des droits de l'assuré et de disponibilité des cartes.
--- Les données sont rattachées au numéro de matricule utilisé dans les dossiers.
+-- Tables de contrôle des droits et de disponibilité, avec références AMO et récépissé séparées.
 CREATE TABLE IF NOT EXISTS `droits_assures` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `numero_amo_recepisse` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `numero_amo` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `numero_recepisse` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `statut` enum('ouverts','suspendus','fermes','inconnu') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'inconnu',
   `date_debut` date DEFAULT NULL,
   `date_fin` date DEFAULT NULL,
@@ -100,22 +100,23 @@ CREATE TABLE IF NOT EXISTS `droits_assures` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_droits_assures_amo` (`numero_amo_recepisse`),
+  KEY `idx_droits_assures_amo` (`numero_amo`),
+  KEY `idx_droits_assures_recepisse` (`numero_recepisse`),
   KEY `idx_droits_assures_statut` (`statut`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `disponibilite_cartes` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `numero_amo_recepisse` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `numero_carte` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `numero_amo` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `numero_recepisse` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `disponibilite` enum('disponible','en_preparation','emise','indisponible','inconnue') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'inconnue',
   `date_mise_a_jour` datetime DEFAULT NULL,
   `observations` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_disponibilite_cartes_numero` (`numero_carte`),
-  KEY `idx_disponibilite_cartes_amo` (`numero_amo_recepisse`),
+  KEY `idx_disponibilite_cartes_amo` (`numero_amo`),
+  KEY `idx_disponibilite_cartes_recepisse` (`numero_recepisse`),
   KEY `idx_disponibilite_cartes_etat` (`disponibilite`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

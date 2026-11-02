@@ -110,12 +110,12 @@ L’interface utilise désormais une palette bleu et blanc inspirée de l’iden
 
 Deux tables complètent le schéma CANAM :
 
-- `droits_assures` conserve le N° AMO/récépissé, le statut des droits (`ouverts`, `suspendus`, `fermes` ou `inconnu`), les dates de validité, la date de vérification et les observations. Elle contient une fiche par N° AMO/récépissé.
-- `disponibilite_cartes` conserve le N° AMO/récépissé, le statut de la carte (`disponible`, `en_preparation`, `emise`, `indisponible` ou `inconnue`), le numéro de carte, la date de mise à jour et les observations. Elle peut contenir plusieurs cartes par N° AMO/récépissé.
+- `droits_assures` conserve séparément `numero_amo` et `numero_recepisse`, le statut des droits (`ouverts`, `suspendus`, `fermes` ou `inconnu`), les dates de validité, la date de vérification et les observations.
+- `disponibilite_cartes` conserve séparément `numero_amo` et `numero_recepisse`, le statut (`disponible`, `en_preparation`, `emise`, `indisponible` ou `inconnue`), la date de mise à jour et les observations. La colonne `numero_carte` est retirée.
 
-Les nouvelles tables sont définies dans `database/sql/canam_service_qualite.sql` et créées par la migration `2026_10_29_000002_create_assure_rights_and_card_availability_tables.php`. Le fichier `database/sql/canam_service_qualite_complet.sql` reprend le SQL complet fourni et y ajoute les deux tables.
+Les tables sont définies dans `database/sql/canam_service_qualite.sql`. La migration `2026_11_02_000004_split_assure_reference_columns.php` met à jour une base existante : elle classe les anciennes valeurs de 13 chiffres comme N° AMO et les autres comme récépissés, puis retire les anciennes colonnes fusionnées et le numéro de carte. Le fichier `database/sql/canam_service_qualite_complet.sql` reprend le SQL complet fourni.
 
-Dans le formulaire de création ou de modification d’une réclamation ou d’une demande d’assistance, la saisie du N° AMO ou du récépissé déclenche automatiquement une recherche dans ces deux tables. Le formulaire affiche les droits et toutes les cartes connues pour ce numéro, ou indique si aucune fiche n’est trouvée. Le contrôle informe l’agent et ne déclenche pas d’affectation automatique. Les tables doivent être alimentées avec les données de référence CANAM ; aucune connexion à un système externe n’est fournie.
+Dans le formulaire de création ou de modification d’une réclamation ou d’une demande d’assistance, la saisie du N° AMO ou du récépissé déclenche automatiquement une recherche dans ces deux tables. Le formulaire affiche les droits et les statuts de carte connus pour ce numéro, ou indique si aucune fiche n’est trouvée. Le contrôle informe l’agent et ne déclenche pas d’affectation automatique. Les tables doivent être alimentées avec les données de référence CANAM ; aucune connexion à un système externe n’est fournie.
 
 ## Changement de mot de passe
 

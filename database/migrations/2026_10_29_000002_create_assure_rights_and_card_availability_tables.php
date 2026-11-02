@@ -11,7 +11,8 @@ return new class extends Migration
         if (! Schema::hasTable('droits_assures')) {
             Schema::create('droits_assures', function (Blueprint $table) {
                 $table->id();
-                $table->string('numero_amo_recepisse', 100)->nullable()->unique();
+                $table->string('numero_amo', 100)->nullable()->index();
+                $table->string('numero_recepisse', 100)->nullable()->index();
                 $table->enum('statut', ['ouverts', 'suspendus', 'fermes', 'inconnu'])->default('inconnu');
                 $table->date('date_debut')->nullable();
                 $table->date('date_fin')->nullable();
@@ -25,8 +26,8 @@ return new class extends Migration
         if (! Schema::hasTable('disponibilite_cartes')) {
             Schema::create('disponibilite_cartes', function (Blueprint $table) {
                 $table->id();
-                $table->string('numero_amo_recepisse', 100)->nullable()->index();
-                $table->string('numero_carte', 100)->nullable()->unique();
+                $table->string('numero_amo', 100)->nullable()->index();
+                $table->string('numero_recepisse', 100)->nullable()->index();
                 $table->enum('disponibilite', ['disponible', 'en_preparation', 'emise', 'indisponible', 'inconnue'])->default('inconnue');
                 $table->dateTime('date_mise_a_jour')->nullable();
                 $table->text('observations')->nullable();

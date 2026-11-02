@@ -52,7 +52,7 @@ class DashboardController extends Controller
             'cardCounts' => $cardCounts,
             'rightsTotal' => array_sum($rightsCounts),
             'cardsTotal' => array_sum($cardCounts),
-            'assureRows' => $this->assureRowsQuery($filters)->orderBy('refs.numero_amo_recepisse')->orderBy('cartes.numero_carte')->paginate(20)->withQueryString(),
+            'assureRows' => $this->assureRowsQuery($filters)->orderBy('refs.numero_amo')->orderBy('refs.numero_recepisse')->paginate(20)->withQueryString(),
             'filters' => $filters,
         ]);
     }
@@ -61,8 +61,8 @@ class DashboardController extends Controller
     {
         $filters = $this->validatedFilters($request);
         $rows = $this->assureRowsQuery($filters)
-            ->orderBy('refs.numero_amo_recepisse')
-            ->orderBy('cartes.numero_carte')
+            ->orderBy('refs.numero_amo')
+            ->orderBy('refs.numero_recepisse')
             ->get();
 
         return Pdf::loadView('dashboard.assure_status_pdf', [
@@ -93,12 +93,16 @@ class DashboardController extends Controller
     private function assureRowsQuery(array $filters)
     {
         $references = DB::table('droits_assures')
-            ->whereNotNull('numero_amo_recepisse')
-            ->select('numero_amo_recepisse')
+            ->where(function ($query) {
+                $query->whereNotNull('numero_amo')->orWhereNotNull('numero_recepisse');
+            })
+            ->select('numero_amo', 'numero_recepisse')
             ->union(
                 DB::table('disponibilite_cartes')
-                    ->whereNotNull('numero_amo_recepisse')
-                    ->select('numero_amo_recepisse')
+                    ->where(function ($query) {
+                        $query->whereNotNull('numero_amo')->orWhereNotNull('numero_recepisse');
+                    })
+                    ->select('numero_amo', 'numero_recepisse')
             );
 
         $dossierSources = DB::table('reclamations')->selectRaw(
@@ -115,13 +119,23 @@ class DashboardController extends Controller
             ->where('dossier_rank', 1);
 
         $query = DB::query()->fromSub($references, 'refs')
-            ->leftJoin('droits_assures as droits', 'droits.numero_amo_recepisse', '=', 'refs.numero_amo_recepisse')
-            ->leftJoin('disponibilite_cartes as cartes', 'cartes.numero_amo_recepisse', '=', 'refs.numero_amo_recepisse')
-            ->leftJoinSub($latestDossier, 'assure', 'assure.numero_amo_recepisse', '=', 'refs.numero_amo_recepisse')
+            ->leftJoin('droits_assures as droits', function ($join) {
+                $join->on('droits.numero_amo', '=', 'refs.numero_amo')
+                    ->orOn('droits.numero_recepisse', '=', 'refs.numero_recepisse');
+            })
+            ->leftJoin('disponibilite_cartes as cartes', function ($join) {
+                $join->on('cartes.numero_amo', '=', 'refs.numero_amo')
+                    ->orOn('cartes.numero_recepisse', '=', 'refs.numero_recepisse');
+            })
+            ->leftJoinSub($latestDossier, 'assure', function ($join) {
+                $join->on('assure.numero_amo_recepisse', '=', 'refs.numero_amo')
+                    ->orOn('assure.numero_amo_recepisse', '=', 'refs.numero_recepisse');
+            })
             ->leftJoin('regions', 'regions.id', '=', 'assure.region_id')
             ->leftJoin('localites', 'localites.id', '=', 'assure.localite_id')
             ->select([
-                'refs.numero_amo_recepisse',
+                'refs.numero_amo',
+                'refs.numero_recepisse',
                 'assure.nom as nom_assure',
                 'assure.numero_matricule',
                 'assure.contact',
@@ -132,7 +146,6 @@ class DashboardController extends Controller
                 'droits.date_fin as droits_date_fin',
                 'droits.verifie_le as droits_verifie_le',
                 'droits.observations as droits_observations',
-                'cartes.numero_carte',
                 'cartes.disponibilite as carte_statut',
                 'cartes.date_mise_a_jour as carte_date_mise_a_jour',
                 'cartes.observations as carte_observations',
@@ -149,7 +162,8 @@ class DashboardController extends Controller
         if ($filters['recherche'] !== '') {
             $search = '%'.$filters['recherche'].'%';
             $query->where(function ($where) use ($search) {
-                $where->where('refs.numero_amo_recepisse', 'like', $search)
+                $where->where('refs.numero_amo', 'like', $search)
+                    ->orWhere('refs.numero_recepisse', 'like', $search)
                     ->orWhere('assure.nom', 'like', $search)
                     ->orWhere('assure.numero_matricule', 'like', $search)
                     ->orWhere('assure.contact', 'like', $search);

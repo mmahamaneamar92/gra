@@ -43,7 +43,7 @@
                     <td>{{ $d->droits_statut ? ($rightsLabels[$d->droits_statut] ?? $d->droits_statut) : '—' }}</td>
                     <td>{{ $d->droits_date_debut ? \Carbon\Carbon::parse($d->droits_date_debut)->format('d/m/Y') : '—' }}</td>
                     <td>{{ $d->droits_date_fin ? \Carbon\Carbon::parse($d->droits_date_fin)->format('d/m/Y') : '—' }}</td>
-                    <td>{{ $d->carte_numero ?? '—' }}<br><small>{{ $d->carte_disponibilite ? ($cardLabels[$d->carte_disponibilite] ?? $d->carte_disponibilite) : '—' }}</small></td>
+                    <td>{{ $d->carte_disponibilite ? ($cardLabels[$d->carte_disponibilite] ?? $d->carte_disponibilite) : '—' }}</td>
                     <td>{{ $d->echeance_traitement?->format('d/m/Y H:i') ?? 'À calculer après affectation' }} @if($d->en_retard)<span class="badge badge-red">Retard</span>@endif</td>
                     <td><span class="badge">{{ str_replace('_', ' ', $d->statut) }}</span></td>
                     <td><a class="btn small" href="{{ route($prefix.'.show', $d->id) }}">Ouvrir</a></td>

@@ -87,7 +87,6 @@
                         <p><strong>{{ $dossier->droits_statut ? ($rightsLabels[$dossier->droits_statut] ?? $dossier->droits_statut) : 'Droits non renseignés' }}</strong></p>
                         <p>Ouverture : {{ $dossier->droits_date_debut ? \Carbon\Carbon::parse($dossier->droits_date_debut)->format('d/m/Y') : '—' }}</p>
                         <p>Fermeture : {{ $dossier->droits_date_fin ? \Carbon\Carbon::parse($dossier->droits_date_fin)->format('d/m/Y') : '—' }}</p>
-                        <p>Carte : {{ $dossier->carte_numero ?? '—' }}</p>
                         <p>{{ $dossier->carte_disponibilite ? ($cardLabels[$dossier->carte_disponibilite] ?? $dossier->carte_disponibilite) : 'Statut carte non renseigné' }}</p>
                     </td>
                     <td>

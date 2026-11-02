@@ -18,7 +18,7 @@
         table.data { width: 100%; border-collapse: collapse; table-layout: fixed; }
         .data th, .data td { padding: 5px; border: 1px solid #d6e2ec; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
         .data th { background: #eaf3fb; color: #21415e; }
-        .col-id { width: 16%; }
+        .col-id { width: 17%; }
         .col-contact { width: 12%; }
         .col-loc { width: 11%; }
         .col-rights { width: 19%; }
@@ -43,7 +43,7 @@
 
     <table class="data">
         <thead><tr>
-            <th class="col-id">Identité / AMO</th>
+            <th class="col-id">Identité / références</th>
             <th class="col-contact">Contact</th>
             <th class="col-loc">Région / localité</th>
             <th class="col-rights">Droits</th>
@@ -53,7 +53,7 @@
         <tbody>
             @forelse($rows as $row)
                 <tr>
-                    <td><strong>{{ $row->nom_assure ?? 'Nom non renseigné' }}</strong><br>N° AMO/récépissé : {{ $row->numero_amo_recepisse }}<br>Matricule : {{ $row->numero_matricule ?? '—' }}</td>
+                    <td><strong>{{ $row->nom_assure ?? 'Nom non renseigné' }}</strong><br>N° AMO : {{ $row->numero_amo ?? '—' }}<br>N° récépissé : {{ $row->numero_recepisse ?? '—' }}<br>Matricule : {{ $row->numero_matricule ?? '—' }}</td>
                     <td>{{ $row->contact ?? '—' }}</td>
                     <td>{{ $row->region ?? '—' }}<br>{{ $row->localite ?? '—' }}</td>
                     <td>
@@ -62,7 +62,6 @@
                         Vérifié le : {{ $row->droits_verifie_le ?? '—' }}
                     </td>
                     <td>
-                        <strong>{{ $row->numero_carte ?? 'Aucun numéro' }}</strong><br>
                         {{ $row->carte_statut ? ($cardLabels[$row->carte_statut] ?? $row->carte_statut) : 'Aucune carte' }}<br>
                         Mis à jour le : {{ $row->carte_date_mise_a_jour ?? '—' }}
                     </td>
