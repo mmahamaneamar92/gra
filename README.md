@@ -1,18 +1,64 @@
-# Application Service Qualité CANAM — Laravel 10 / Blade / MySQL 8
+# Application Service Qualité CANAM — Laravel / Blade / MySQL 8
 
-Cette archive contient le code applicatif à intégrer dans un projet Laravel 10 existant/neuf. Les noms des tables et colonnes applicatives sont alignés sur le schéma SQL fourni par le Service Qualité : `numero_ordre`, `reclamant`, `demandeur`, `responsable_traitement_id`, `echeance_traitement`, `causes_probleme`, etc.
+Application de suivi des réclamations et des demandes d'assistance du Service Qualité CANAM. Le dépôt contient désormais le squelette Laravel complet (Laravel 12 + Breeze + DomPDF) ainsi que le code applicatif d'origine. Les noms des tables et colonnes applicatives sont alignés sur le schéma SQL fourni par le Service Qualité : `numero_ordre`, `reclamant`, `demandeur`, `responsable_traitement_id`, `echeance_traitement`, `causes_probleme`, etc.
 
-L’interface utilise désormais une palette bleu et blanc inspirée de l’identité CANAM Mali.
+> Le code applicatif d'origine ciblait Laravel 10. Laravel 10 étant en fin de support et bloqué par les avis de sécurité de Composer, le squelette fourni utilise **Laravel 12** (mêmes composants Blade/Eloquent, code applicatif inchangé). Le déploiement en production doit utiliser une version de Laravel encore maintenue.
+
+L’interface utilise une palette bleu et blanc inspirée de l’identité CANAM Mali.
+
+## Démarrage rapide (Docker, environnement local)
+
+Le stack Docker fourni lance l'application et MySQL 8 sans toucher aux applications déjà présentes sur la machine.
+
+| Service | URL / port hôte | Identifiants |
+|---|---|---|
+| Application | http://localhost:8095 | `admin@canam.local` / `CanamAdmin2026` |
+| MySQL | `127.0.0.1:33075` | base `canam_service_qualite`, utilisateur `canam`, mot de passe `canam` |
+| MySQL root | `127.0.0.1:33075` | `root` / `canamroot` |
+
+Les ports `8095` et `33075` ont été choisis pour éviter les ports déjà utilisés en local. Pour les changer, modifiez `ports` dans `docker-compose.yml` (partie gauche uniquement) puis relancez le stack.
+
+```bash
+# Construire l'image et démarrer l'application + MySQL
+docker compose up -d --build
+
+# Suivre les logs de l'application
+docker compose logs -f app
+
+# Ouvrir l'application
+# http://localhost:8095/login
+```
+
+Au premier démarrage, le conteneur crée `.env` depuis `.env.example`, génère la clé applicative, installe les dépendances Composer, exécute les migrations et le seeder. Les données MySQL sont conservées dans le volume `canam-db-data`.
+
+Commandes utiles :
+
+```bash
+# Exécuter une commande Artisan
+docker compose exec app php artisan route:list
+
+# Ouvrir un shell dans le conteneur
+docker compose exec app sh
+
+# Arrêter les conteneurs (les données sont conservées)
+docker compose down
+
+# Tout réinitialiser, y compris la base de données
+docker compose down -v
+docker compose up -d --build
+```
+
+> Changez le mot de passe administrateur par défaut avant tout usage hors développement local.
 
 ## 1. Pré-requis
 
-- PHP 8.1 ou supérieur, extensions Laravel habituelles
-- Composer
-- MySQL 8.0+
-- Node.js / npm (si vous utilisez les assets Breeze)
-- Laravel 10
+**Avec Docker (recommandé pour l'exécution locale)** : Docker et Docker Compose uniquement.
 
-## 2. Installation
+**Installation manuelle dans un projet Laravel existant** : PHP 8.2+, Composer, MySQL 8.0+, Node.js/npm si vous utilisez les assets Breeze.
+
+## 2. Installation manuelle dans un projet Laravel existant
+
+> Cette section décrit l'intégration du code applicatif dans un **autre** projet Laravel. Le présent dépôt contient déjà le squelette complet : pour l'exécution locale, utilisez plutôt la section « Démarrage rapide (Docker) » ci-dessus.
 
 1. Créer le projet Laravel :
 

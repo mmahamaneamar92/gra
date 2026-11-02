@@ -89,6 +89,7 @@ CREATE TABLE user_roles (
     role_id BIGINT UNSIGNED NOT NULL,
     attribue_par BIGINT UNSIGNED NULL,
     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id, role_id),
     CONSTRAINT fk_user_roles_user FOREIGN KEY (user_id) REFERENCES users(id)
         ON UPDATE CASCADE ON DELETE CASCADE,
@@ -470,12 +471,9 @@ CREATE TABLE affectations (
     CONSTRAINT fk_affectations_nouveau FOREIGN KEY (responsable_nouveau_id) REFERENCES users(id)
         ON UPDATE CASCADE ON DELETE RESTRICT,
     CONSTRAINT fk_affectations_auteur FOREIGN KEY (affecte_par) REFERENCES users(id)
-        ON UPDATE CASCADE ON DELETE SET NULL,
-    CONSTRAINT chk_affectations_un_dossier CHECK (
-        (module = 'reclamation' AND reclamation_id IS NOT NULL AND demande_assistance_id IS NULL)
-        OR
-        (module = 'assistance' AND demande_assistance_id IS NOT NULL AND reclamation_id IS NULL)
-    )
+        ON UPDATE CASCADE ON DELETE SET NULL
+    -- MySQL 8 interdit un CHECK sur une colonne utilisée par une FK en CASCADE.
+    -- La cohérence module/dossier est garantie par l'application.
 ) ENGINE=InnoDB;
 
 -- =====================================================================
@@ -511,12 +509,9 @@ CREATE TABLE relances (
     CONSTRAINT fk_relances_destinataire FOREIGN KEY (destinataire_id) REFERENCES users(id)
         ON UPDATE CASCADE ON DELETE SET NULL,
     CONSTRAINT fk_relances_createur FOREIGN KEY (cree_par) REFERENCES users(id)
-        ON UPDATE CASCADE ON DELETE SET NULL,
-    CONSTRAINT chk_relances_un_dossier CHECK (
-        (module = 'reclamation' AND reclamation_id IS NOT NULL AND demande_assistance_id IS NULL)
-        OR
-        (module = 'assistance' AND demande_assistance_id IS NOT NULL AND reclamation_id IS NULL)
-    )
+        ON UPDATE CASCADE ON DELETE SET NULL
+    -- MySQL 8 interdit un CHECK sur une colonne utilisée par une FK en CASCADE.
+    -- La cohérence module/dossier est garantie par l'application.
 ) ENGINE=InnoDB;
 
 -- =====================================================================
@@ -570,12 +565,9 @@ CREATE TABLE historique_statuts (
     CONSTRAINT fk_hist_statut_assistance FOREIGN KEY (demande_assistance_id) REFERENCES demandes_assistance(id)
         ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT fk_hist_statut_user FOREIGN KEY (modifie_par) REFERENCES users(id)
-        ON UPDATE CASCADE ON DELETE SET NULL,
-    CONSTRAINT chk_hist_statut_un_dossier CHECK (
-        (module = 'reclamation' AND reclamation_id IS NOT NULL AND demande_assistance_id IS NULL)
-        OR
-        (module = 'assistance' AND demande_assistance_id IS NOT NULL AND reclamation_id IS NULL)
-    )
+        ON UPDATE CASCADE ON DELETE SET NULL
+    -- MySQL 8 interdit un CHECK sur une colonne utilisée par une FK en CASCADE.
+    -- La cohérence module/dossier est garantie par l'application.
 ) ENGINE=InnoDB;
 
 -- =====================================================================
@@ -603,12 +595,9 @@ CREATE TABLE pieces_jointes (
     CONSTRAINT fk_pj_assistance FOREIGN KEY (demande_assistance_id) REFERENCES demandes_assistance(id)
         ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT fk_pj_user FOREIGN KEY (ajoute_par) REFERENCES users(id)
-        ON UPDATE CASCADE ON DELETE SET NULL,
-    CONSTRAINT chk_pj_un_dossier CHECK (
-        (module = 'reclamation' AND reclamation_id IS NOT NULL AND demande_assistance_id IS NULL)
-        OR
-        (module = 'assistance' AND demande_assistance_id IS NOT NULL AND reclamation_id IS NULL)
-    )
+        ON UPDATE CASCADE ON DELETE SET NULL
+    -- MySQL 8 interdit un CHECK sur une colonne utilisée par une FK en CASCADE.
+    -- La cohérence module/dossier est garantie par l'application.
 ) ENGINE=InnoDB;
 
 -- =====================================================================

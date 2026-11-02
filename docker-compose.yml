@@ -1,0 +1,41 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: canam-service-qualite-app
+    container_name: canam-app
+    working_dir: /var/www/html
+    user: "${UID:-1000}:${GID:-1000}"
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8095:8000"
+    environment:
+      COMPOSER_HOME: /tmp/composer
+      HOME: /tmp
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    container_name: canam-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: canam_service_qualite
+      MYSQL_USER: canam
+      MYSQL_PASSWORD: canam
+      MYSQL_ROOT_PASSWORD: canamroot
+    ports:
+      - "33075:3306"
+    volumes:
+      - canam-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  canam-db-data:
