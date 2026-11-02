@@ -7,7 +7,9 @@ if [ ! -f .env ]; then
     cp .env.example .env
 fi
 
-composer install --no-interaction --prefer-dist
+# OCI8 n'est pas installé dans l'image Docker de développement.
+# L'extension reste obligatoire sur le serveur Windows/Laragon de production.
+composer install --no-interaction --prefer-dist --ignore-platform-req=ext-oci8
 
 if ! grep -q '^APP_KEY=base64:' .env; then
     php artisan key:generate --ansi

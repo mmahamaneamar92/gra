@@ -64,6 +64,28 @@ return [
             ]) : [],
         ],
 
+        'oracle' => [
+            'driver' => 'oracle',
+            'tns' => env('ORACLE_TNS', ''),
+            'host' => env('ORACLE_HOST', ''),
+            'port' => env('ORACLE_PORT', '1521'),
+            // En yajra/laravel-oci8, "database" est un SID. Le service name
+            // doit être renseigné dans "service_name" (sinon SID = database).
+            'database' => env('ORACLE_SID', ''),
+            'service_name' => env('ORACLE_SERVICE_NAME', ''),
+            'username' => env('ORACLE_USERNAME', ''),
+            'password' => env('ORACLE_PASSWORD', ''),
+            'charset' => env('ORACLE_CHARSET', 'AL32UTF8'),
+            'prefix' => env('ORACLE_PREFIX', ''),
+            'prefix_schema' => env('ORACLE_SCHEMA_PREFIX', ''),
+            // Utilisé par la commande canam:oracle pour l'inspection.
+            'schema' => env('ORACLE_SCHEMA', ''),
+            'edition' => env('ORACLE_EDITION', 'ora$base'),
+            'server_version' => env('ORACLE_SERVER_VERSION', '12c'),
+            'load_balance' => env('ORACLE_LOAD_BALANCE', 'yes'),
+            'max_name_len' => env('ORACLE_MAX_NAME_LEN', 30),
+        ],
+
         'mariadb' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),
