@@ -81,7 +81,7 @@ return [
             // Utilisé par la commande canam:oracle pour l'inspection.
             'schema' => env('ORACLE_SCHEMA', ''),
             'edition' => env('ORACLE_EDITION', 'ora$base'),
-            'server_version' => env('ORACLE_SERVER_VERSION', '12c'),
+            'server_version' => env('ORACLE_SERVER_VERSION', '19c'),
             'load_balance' => env('ORACLE_LOAD_BALANCE', 'yes'),
             'max_name_len' => env('ORACLE_MAX_NAME_LEN', 30),
         ],

@@ -54,6 +54,8 @@ docker compose up -d --build
 
 La connexion Oracle est configurée mais **inactive par défaut**. Elle est destinée à la lecture des vues CANAM (droits et cartes) via **OCI8**.
 
+> Cible de production : **Oracle 19c** (base et Oracle Instant Client 19c x64), avec `ORACLE_SERVER_VERSION=19c`.
+
 - Driver Laravel : `yajra/laravel-oci8:^12`
 - Connexion : `oracle` dans `config/database.php`
 - Package installé avec `--ignore-platform-req=ext-oci8` pour le Docker de développement, qui ne contient pas OCI8.
@@ -71,7 +73,7 @@ ORACLE_USERNAME=GRCCANAM
 ORACLE_PASSWORD=
 ORACLE_CHARSET=AL32UTF8
 ORACLE_SCHEMA=GRCCANAM
-ORACLE_SERVER_VERSION=12c
+ORACLE_SERVER_VERSION=19c
 ```
 
 > Dans `yajra/laravel-oci8`, la clé `database` correspond à un **SID**. Le service name doit être mis dans `ORACLE_SERVICE_NAME`, sinon la connexion tentera `SID = ...` et échouera.
@@ -100,7 +102,7 @@ Après installation d’OCI8, les commandes Laravel natives peuvent aussi être 
 
 **Installation manuelle dans un projet Laravel existant** : PHP 8.2+, Composer, MySQL 8.0+, Node.js/npm si vous utilisez les assets Breeze.
 
-**Pour Oracle en production Windows/Laragon** : OCI8 3.4.x (DLL correspondant à la version PHP, x64, TS/NTS) + Oracle Instant Client 19c/23ai x64 + Visual C++ Redistributable 2015-2022.
+**Pour Oracle en production Windows/Laragon** : cible **Oracle 19c**, avec OCI8 3.4.x (DLL correspondant à la version PHP, x64, TS/NTS) + **Oracle Instant Client 19c x64** + Visual C++ Redistributable 2015-2022.
 
 ## 2. Installation manuelle dans un projet Laravel existant
 
