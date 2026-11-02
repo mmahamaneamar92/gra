@@ -110,10 +110,11 @@ L’interface utilise désormais une palette bleu et blanc inspirée de l’iden
 
 Deux tables complètent le schéma CANAM :
 
-- `droits_assures` et `disponibilite_cartes` ont le même ensemble de colonnes : références AMO/récépissé séparées, statuts, dates et champs descriptifs visibles dans les deux captures (identité, OGD, NINA, dates, centre d’enrôlement, ID de statut, etc.). La colonne `numero_carte` est supprimée.
-- Ces informations sont enregistrées localement ; l’application ne se connecte pas à Oracle et ne déduit pas le libellé de `ID_STATUT_CARTE`.
+- `droits_assures` conserve les champs de la vue des droits (OGD, matricule OGD, AMO assuré/ayant droit, dates d’ouverture/fermeture, etc.) et ses propres champs de statut.
+- `disponibilite_cartes` conserve les champs de la vue des cartes (récépissé, AMO, identité, NINA, centre, dates d’émission/remise et ID du statut) et son statut de disponibilité. La colonne `numero_carte` est supprimée.
+- Les deux tables ont les colonnes `numero_amo` et `numero_recepisse`, mais leurs autres colonnes correspondent chacune à leur capture. Les données restent locales ; l’application ne se connecte pas à Oracle.
 
-Les tables sont définies dans `database/sql/canam_service_qualite.sql`. Les migrations `2026_11_02_000004` à `000007` séparent les anciennes références, ajoutent les champs des captures et harmonisent les colonnes des deux tables. Les anciennes valeurs de 13 chiffres sont classées comme N° AMO et les autres comme récépissés. Le fichier `database/sql/canam_service_qualite_complet.sql` reprend le schéma SQL complet.
+Les tables sont définies dans `database/sql/canam_service_qualite.sql`. Les migrations `2026_11_02_000004` à `000007` séparent et préparent les références existantes. La migration `000008` restaure les colonnes propres à chaque vue et supprime celles ajoutées à la mauvaise table ; les anciennes valeurs de 13 chiffres sont classées comme N° AMO et les autres comme récépissés. Le fichier `database/sql/canam_service_qualite_complet.sql` reprend le schéma SQL complet.
 
 Dans le formulaire de création ou de modification d’une réclamation ou d’une demande d’assistance, la saisie du N° AMO ou du récépissé déclenche automatiquement une recherche dans ces deux tables. Le formulaire affiche les droits et les statuts de carte connus pour ce numéro, ou indique si aucune fiche n’est trouvée. Le contrôle informe l’agent et ne déclenche pas d’affectation automatique. Les tables doivent être alimentées avec les données de référence CANAM ; aucune connexion à un système externe n’est fournie.
 

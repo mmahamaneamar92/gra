@@ -52,7 +52,7 @@
                     <td>{{ $row->contact ?? '—' }}</td>
                     <td>{{ $row->region ?? '—' }}{{ $row->localite ? ' / '.$row->localite : '' }}</td>
                     <td>{{ $row->droits_statut ? ($rightsLabels[$row->droits_statut] ?? $row->droits_statut) : 'Aucune fiche' }}<br><small>{{ $row->droits_ouverture_source ?? $row->droits_date_debut ?? '—' }} → {{ $row->droits_fermeture_source ?? $row->droits_date_fin ?? '—' }}<br>Premium {{ $row->droits_fermeture_premium ?? '—' }}</small></td>
-                    <td>{{ $row->carte_statut ? ($cardLabels[$row->carte_statut] ?? $row->carte_statut) : 'Aucune fiche' }}<br><small>ID {{ $row->carte_id_statut ?? $row->carte_id_statut_source ?? '—' }} · Centre {{ $row->carte_centre_enr ?? '—' }}<br>Lot {{ $row->carte_numero_lot ?? '—' }} · Émise {{ $row->carte_date_emission ?? $row->carte_date_emission_source ?? '—' }}<br>Remise {{ $row->carte_date_remise ?? '—' }}</small></td>
+                    <td>{{ $row->carte_statut ? ($cardLabels[$row->carte_statut] ?? $row->carte_statut) : 'Aucune fiche' }}<br><small>ID {{ $row->carte_id_statut ?? '—' }} · Centre {{ $row->carte_centre_enr ?? '—' }}<br>Émise {{ $row->carte_date_emission ?? '—' }} · Remise {{ $row->carte_date_remise ?? '—' }}</small></td>
                     <td>{{ $row->droits_observations ?? $row->carte_observations ?? '—' }}</td>
                 </tr>
             @empty

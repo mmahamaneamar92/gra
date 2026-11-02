@@ -65,10 +65,9 @@
                     </td>
                     <td>
                         {{ $row->carte_statut ? ($cardLabels[$row->carte_statut] ?? $row->carte_statut) : 'Aucune fiche' }}<br>
-                        ID statut : {{ $row->carte_id_statut ?? $row->carte_id_statut_source ?? '—' }} · Centre : {{ $row->carte_centre_enr ?? '—' }}<br>
+                        ID statut : {{ $row->carte_id_statut ?? '—' }} · Centre : {{ $row->carte_centre_enr ?? '—' }}<br>
                         AMO assuré : {{ $row->carte_amo_assure ?? '—' }}<br>
-                        Lot : {{ $row->carte_numero_lot ?? '—' }}<br>
-                        Émission : {{ $row->carte_date_emission ?? $row->carte_date_emission_source ?? '—' }} · Remise : {{ $row->carte_date_remise ?? '—' }}<br>
+                        Émission : {{ $row->carte_date_emission ?? '—' }} · Remise : {{ $row->carte_date_remise ?? '—' }}<br>
                         Mis à jour : {{ $row->carte_date_mise_a_jour ?? '—' }}
                     </td>
                     <td>Droits : {{ $row->droits_observations ?? '—' }}<br>Carte : {{ $row->carte_observations ?? '—' }}</td>

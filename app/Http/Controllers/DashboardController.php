@@ -136,52 +136,48 @@ class DashboardController extends Controller
             ->select([
                 'refs.numero_amo',
                 'refs.numero_recepisse',
-                DB::raw('COALESCE(droits.nom_source, cartes.nom_source, droits.nom_assure, cartes.nom_assure, assure.nom) as nom_assure'),
+                DB::raw('COALESCE(droits.nom_source, cartes.nom_source, assure.nom) as nom_assure'),
                 DB::raw('COALESCE(droits.prenom_source, cartes.prenom_source) as prenom_assure'),
-                DB::raw('COALESCE(droits.date_naissance_source, cartes.date_naissance_source, CAST(droits.date_naissance AS CHAR), CAST(cartes.date_naissance AS CHAR)) as date_naissance_assure'),
-                DB::raw('COALESCE(droits.nina, cartes.nina) as nina_assure'),
+                DB::raw('COALESCE(droits.date_naissance_source, CAST(cartes.date_naissance AS CHAR)) as date_naissance_assure'),
+                'cartes.nina as nina_assure',
                 DB::raw('COALESCE(droits.ogd_source, cartes.ogd_source) as ogd_assure'),
-                DB::raw('COALESCE(droits.matricule_ogd, cartes.matricule_ogd) as matricule_ogd'),
-                DB::raw('COALESCE(droits.matricule_ogd, cartes.matricule_ogd, assure.numero_matricule) as numero_matricule'),
-                DB::raw('COALESCE(droits.numero_emp, cartes.numero_emp) as numero_emp'),
-                DB::raw('COALESCE(droits.csp, cartes.csp) as csp'),
-                DB::raw('COALESCE(droits.lien_source, cartes.lien_source) as lien_assure'),
-                DB::raw('COALESCE(droits.sexe_source, cartes.sexe_source) as sexe_assure'),
-                DB::raw('COALESCE(droits.localite_source, cartes.localite_source) as localite_assure'),
+                'droits.matricule_ogd',
+                DB::raw('COALESCE(droits.matricule_ogd, assure.numero_matricule) as numero_matricule'),
+                'droits.numero_emp',
+                'droits.csp',
+                'droits.lien_source as lien_assure',
+                'droits.sexe_source as sexe_assure',
+                'droits.localite_source as localite_assure',
                 DB::raw('COALESCE(droits.telephone_source, cartes.telephone_source, assure.contact) as contact'),
-                DB::raw('COALESCE(droits.date_immatriculation_source, cartes.date_immatriculation_source) as date_immatriculation'),
-                DB::raw('COALESCE(droits.date_maj_source, cartes.date_maj_source) as date_maj_source'),
-                DB::raw('COALESCE(droits.amo_ayant_droit, cartes.amo_ayant_droit) as amo_ayant_droit'),
+                'droits.date_immatriculation_source as date_immatriculation',
+                'droits.date_maj_source',
+                'droits.amo_ayant_droit',
                 'regions.nom as region',
-                DB::raw('COALESCE(localites.nom, droits.localite_source, cartes.localite_source) as localite'),
-                DB::raw('COALESCE(droits.statut, cartes.statut) as droits_statut'),
-                DB::raw('COALESCE(droits.date_debut, cartes.date_debut) as droits_date_debut'),
-                DB::raw('COALESCE(droits.date_fin, cartes.date_fin) as droits_date_fin'),
-                DB::raw('COALESCE(droits.date_ouverture_droit_source, cartes.date_ouverture_droit_source) as droits_ouverture_source'),
-                DB::raw('COALESCE(droits.date_fermeture_droit_source, cartes.date_fermeture_droit_source) as droits_fermeture_source'),
-                DB::raw('COALESCE(droits.date_fermeture_premium, cartes.date_fermeture_premium) as droits_fermeture_premium'),
-                DB::raw('COALESCE(droits.verifie_le, cartes.verifie_le) as droits_verifie_le'),
+                DB::raw('COALESCE(localites.nom, droits.localite_source) as localite'),
+                'droits.statut as droits_statut',
+                'droits.date_debut as droits_date_debut',
+                'droits.date_fin as droits_date_fin',
+                'droits.date_ouverture_droit_source as droits_ouverture_source',
+                'droits.date_fermeture_droit_source as droits_fermeture_source',
+                'droits.date_fermeture_premium as droits_fermeture_premium',
+                'droits.verifie_le as droits_verifie_le',
                 'droits.observations as droits_observations',
-                DB::raw('COALESCE(cartes.disponibilite, droits.disponibilite) as carte_statut'),
-                DB::raw('COALESCE(cartes.date_mise_a_jour, droits.date_mise_a_jour) as carte_date_mise_a_jour'),
+                'cartes.disponibilite as carte_statut',
+                'cartes.date_mise_a_jour as carte_date_mise_a_jour',
                 'cartes.centre_enr as carte_centre_enr',
                 'cartes.amo_assure as carte_amo_assure',
                 'cartes.date_emission as carte_date_emission',
-                'cartes.date_emission_source as carte_date_emission_source',
                 'cartes.date_remise as carte_date_remise',
                 'cartes.id_statut_carte as carte_id_statut',
-                'cartes.id_statut_source as carte_id_statut_source',
-                'cartes.numero_lot_source as carte_numero_lot',
-                'cartes.date_naissance as carte_date_naissance',
                 'cartes.observations as carte_observations',
             ]);
 
         if ($filters['droits_statut'] !== '') {
-            $query->where(fn ($where) => $where->where('droits.statut', $filters['droits_statut'])->orWhere('cartes.statut', $filters['droits_statut']));
+            $query->where('droits.statut', $filters['droits_statut']);
         }
 
         if ($filters['carte_statut'] !== '') {
-            $query->where(fn ($where) => $where->where('cartes.disponibilite', $filters['carte_statut'])->orWhere('droits.disponibilite', $filters['carte_statut']));
+            $query->where('cartes.disponibilite', $filters['carte_statut']);
         }
 
         if ($filters['recherche'] !== '') {
